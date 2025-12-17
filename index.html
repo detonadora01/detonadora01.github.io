@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
             padding: 20px;
         }
 
-        h2 {
+        h2, h3 {
             text-align: center;
             color: #b30059;
         }
@@ -24,7 +24,7 @@
             padding: 20px;
             margin: 20px auto;
             border-radius: 15px;
-             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         label {
@@ -47,59 +47,119 @@
         }
 
         button {
-            width: 100%;
             background: #b30059;
-                 color: white;
+            color: white;
             padding: 10px;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
         }
 
         button:hover {
             background: #99004d;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border-bottom: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f2cce0;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Produtos de Maquiagem</h2>
-<!-- PRODUTOS -->
-    <div class="card">
-        <form>
-            <label>Nome do Produto:</label>
-            <select>
-                <option>Base Líquida </option>
-                <option>Corretivo</option>
-                <option>Blush</option>
-                <option>Rímel</option>
-                <option>Pó Compacto</option>
-            </select>
+<h2>Produtos de Maquiagem</h2>
 
-            <label>Preço Médio (R$):</label>
-            <input type="number" value="39.90" step="0.01">
+<!-- FORMULÁRIO DE PRODUTOS -->
+<div class="card">
+    <label>Nome do Produto:</label>
+    <select id="produto">
+        <option>Base Líquida</option>
+        <option>Corretivo</option>
+        <option>Blush</option>
+        <option>Rímel</option>
+        <option>Pó Compacto</option>
+    </select>
 
-            <label>Marca:</label>
-            <select>
-                <option>Ruby Rose</option>
-                <option>Vult</option>
-                <option>O Boticário</option>
-                <option>Maybelline</option>
-                <option>Bruna Tavares</option>
-            </select>
+    <label>Preço Médio (R$):</label>
+    <input type="number" value="39.90" step="0.01">
 
-            <label>Estoque:</label>
-            <input type="number" value="20">
+    <label>Marca:</label>
+    <select>
+        <option>Ruby Rose</option>
+        <option>Vult</option>
+        <option>O Boticário</option>
+        <option>Maybelline</option>
+        <option>Bruna Tavares</option>
+    </select>
 
-            <label>Modo de Uso:</label>
-            <textarea rows="3">Aplicar com esponja ou pincel.</textarea>
+    <label>Estoque:</label>
+    <input type="number" value="20">
 
-            <button>Cadastrar</button>
-        </form>
-    </div>
-        <form>
-            <label>Alterações:</label>
-        </form>
+    <label>Modo de Uso:</label>
+    <textarea rows="3">Aplicar com esponja ou pincel.</textarea>
+</div>
+
+<!-- ALTERAÇÕES -->
+<div class="card">
+    <h3>Alterações</h3>
+
+    <label>Descreva a alteração:</label>
+    <input type="text" id="alteracao" placeholder="Ex: estoque alterado para 15">
+
+    <button onclick="adicionar()">Confirmar Alteração</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Alteração</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="lista"></tbody>
+    </table>
+</div>
+
+<script>
+function adicionar() {
+    let produto = document.getElementById("produto").value;
+    let alteracao = document.getElementById("alteracao").value;
+
+    if (alteracao === "") return;
+
+    let linha = `
+        <tr>
+            <td>${produto}</td>
+            <td>${alteracao}</td>
+            <td>
+                <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">Apagar</button>
+            </td>
+        </tr>
+    `;
+
+    document.getElementById("lista").innerHTML += linha;
+    document.getElementById("alteracao").value = "";
+}
+</script>
+
 </body>
 </html>
