@@ -1,164 +1,244 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Maquiagem</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário de Maquiagem</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9e9f2;
-            margin: 0;
-            padding: 20px;
-        }
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f9e9f2;
+    margin:0;
+    padding:20px;
+}
 
-        h2, h3 {
-            text-align: center;
-            color: #b30059;
-        }
+h2,h3{
+    text-align:center;
+    color:#b30059;
+}
 
-        .card {
-            background: white;
-            width: 400px;
-            padding: 20px;
-            margin: 20px auto;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+.card{
+    background:white;
+    width:400px;
+    padding:20px;
+    margin:20px auto;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
 
-        label {
-            font-weight: bold;
-            color: #333;
-        }
+label{
+    font-weight:bold;
+    color:#333;
+}
 
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-        }
+input, select, textarea{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    outline:none;
+}
 
-        input:focus, select:focus, textarea:focus {
-            border-color: #b30059;
-        }
+input:focus, select:focus, textarea:focus{
+    border-color:#b30059;
+}
 
-        button {
-            background: #b30059;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
+input[readonly]{
+    background:#eee;
+}
 
-        button:hover {
-            background: #99004d;
-        }
+button{
+    background:#b30059;
+    color:white;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    font-size:14px;
+    cursor:pointer;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+button:hover{
+    background:#99004d;
+}
 
-        th, td {
-            border-bottom: 1px solid #ccc;
-            padding: 6px;
-            text-align: center;
-            font-size: 13px;
-        }
+.btn-delete{
+    background:#e74c3c;
+    padding:6px 10px;
+    border-radius:6px;
+}
 
-        th {
-            background: #f2cce0;
-        }
+.btn-export{
+    background:#4CAF50;
+    margin-bottom:10px;
+}
 
-        .btn-delete {
-            background: #e74c3c;
-            padding: 6px 10px;
-            border-radius: 6px;
-        }
-    </style>
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+th, td{
+    border-bottom:1px solid #ccc;
+    padding:6px;
+    text-align:center;
+    font-size:13px;
+}
+
+th{
+    background:#f2cce0;
+}
+
+/* RESPONSIVO */
+@media (max-width:480px){
+    .card{ width:95%; }
+    h2,h3{ font-size:18px; }
+}
+</style>
 </head>
+
 <body>
 
 <h2>Produtos de Maquiagem</h2>
 
-<!-- FORMULÁRIO DE PRODUTOS -->
+<!-- FORMULÁRIO -->
 <div class="card">
-    <label>Nome do Produto:</label>
-    <select id="produto">
-        <option>Base Líquida</option>
+    <label>Produto:</label>
+    <select id="produto" onchange="definirPreco(); definirUso();">
+        <option>Base</option>
         <option>Corretivo</option>
         <option>Blush</option>
         <option>Rímel</option>
-        <option>Pó Compacto</option>
+        <option>Pó</option>
     </select>
 
-    <label>Preço Médio (R$):</label>
-    <input type="number" value="39.90" step="0.01">
-
     <label>Marca:</label>
-    <select>
+    <select id="marca" onchange="definirPreco()">
         <option>Ruby Rose</option>
         <option>Vult</option>
         <option>O Boticário</option>
         <option>Maybelline</option>
-        <option>Bruna Tavares</option>
     </select>
 
-    <label>Estoque:</label>
-    <input type="number" value="20">
+    <label>Preço (R$):</label>
+    <input type="number" id="preco" readonly>
 
-    <label>Modo de Uso:</label>
-    <textarea rows="3">Aplicar com esponja ou pincel.</textarea>
+    <label>Estoque:</label>
+    <input type="number" id="estoque" value="20">
+
+    <label>Modo de uso:</label>
+    <textarea id="uso" rows="3"></textarea>
+
+    <button onclick="salvar()">Confirmar Alteração</button>
 </div>
 
 <!-- ALTERAÇÕES -->
 <div class="card">
-    <h3>Alterações</h3>
+    <h3>Alterações Realizadas</h3>
 
-    <label>Descreva a alteração:</label>
-    <input type="text" id="alteracao" placeholder="Ex: estoque alterado para 15">
-
-    <button onclick="adicionar()">Confirmar Alteração</button>
+    <button class="btn-export" onclick="exportar()">Exportar para Planilha</button>
 
     <table>
         <thead>
             <tr>
                 <th>Produto</th>
-                <th>Alteração</th>
-                <th>Ações</th>
+                <th>O que foi editado</th>
+                <th>Ação</th>
             </tr>
         </thead>
-        <tbody id="lista"></tbody>
+        <tbody id="tabela"></tbody>
     </table>
 </div>
 
 <script>
-function adicionar() {
-    let produto = document.getElementById("produto").value;
-    let alteracao = document.getElementById("alteracao").value;
+// PREÇOS
+let valores = {
+    "Base": [39.90, 55.90, 89.90, 79.90],
+    "Corretivo": [29.90, 45.90, 69.90, 59.90],
+    "Blush": [29.90, 45.90, 69.90, 59.90],
+    "Rímel": [25.90, 39.90, 59.90, 49.90],
+    "Pó": [34.90, 49.90, 79.90, 69.90]
+};
 
-    if (alteracao === "") return;
+// MODOS DE USO PADRÃO
+let modos = {
+    "Base": "Espalhar com pincel ou esponja.",
+    "Corretivo": "Aplicar nas imperfeições e espalhar com os dedos ou pincel.",
+    "Blush": "Aplicar nas maçãs do rosto com pincel.",
+    "Rímel": "Aplicar nos cílios da raiz até as pontas.",
+    "Pó": "Aplicar com pincel ou esponja para selar a maquiagem."
+};
 
-    let linha = `
-        <tr>
-            <td>${produto}</td>
-            <td>${alteracao}</td>
-            <td>
-                <button class="btn-delete" onclick="this.parentElement.parentElement.remove()">Apagar</button>
-            </td>
-        </tr>
-    `;
+let lista = JSON.parse(localStorage.getItem("lista")) || [];
 
-    document.getElementById("lista").innerHTML += linha;
-    document.getElementById("alteracao").value = "";
+// DEFINE PREÇO
+function definirPreco(){
+    preco.value = valores[produto.value][marca.selectedIndex];
 }
+
+// DEFINE MODO DE USO
+function definirUso(){
+    uso.value = modos[produto.value];
+}
+
+// SALVA ALTERAÇÕES
+function salvar(){
+    if(estoque.value !== ""){
+        lista.push(
+            "Estoque do " + produto.value +
+            " alterado para " + estoque.value + " unidades"
+        );
+    }
+
+    if(uso.value !== modos[produto.value]){
+        lista.push(
+            "Modo de uso do " + produto.value +
+            " alterado para: " + uso.value
+        );
+        modos[produto.value] = uso.value;
+    }
+
+    localStorage.setItem("lista", JSON.stringify(lista));
+    mostrar();
+}
+
+// MOSTRA TABELA
+function mostrar(){
+    tabela.innerHTML = "";
+    for(let i=0; i<lista.length; i++){
+        tabela.innerHTML +=
+        "<tr>" +
+        "<td>" + produto.value + "</td>" +
+        "<td>" + lista[i] + "</td>" +
+        "<td><button class='btn-delete' onclick='apagar("+i+")'>Apagar</button></td>" +
+        "</tr>";
+    }
+}
+
+// APAGA
+function apagar(i){
+    lista.splice(i,1);
+    localStorage.setItem("lista", JSON.stringify(lista));
+    mostrar();
+}
+
+// EXPORTA CSV
+function exportar(){
+    let texto = lista.join("\n");
+    let arquivo = new Blob([texto], {type:"text/csv"});
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(arquivo);
+    link.download = "alteracoes_maquiagem.csv";
+    link.click();
+}
+
+// INICIALIZA
+definirPreco();
+definirUso();
+mostrar();
 </script>
 
 </body>
